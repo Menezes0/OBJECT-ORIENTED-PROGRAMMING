@@ -1,0 +1,2 @@
+class LoginInvalidoException(Exception):
+  pass
