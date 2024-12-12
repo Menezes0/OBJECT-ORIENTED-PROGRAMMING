@@ -1,3 +1,4 @@
+
 '''Curso: Informática
 Turma: 2A matutino
 Disciplina: Programação Orientada a Objetos
@@ -13,7 +14,6 @@ from conta import Conta
 from Visitante import Visitante
 
 import time
-import os
 
 # Armazenar os usuários cadastrados
 usuarios_cadastrados = []
@@ -45,7 +45,6 @@ Insira o número correspondente: '''))
 
     usuarios_cadastrados.append(usuario)
     time.sleep(2)
-    os.system('cls')
     print()
     print(f"Usuário {nome} cadastrado com sucesso.")
 
@@ -63,7 +62,7 @@ def fazer_login():
 
     if usuario_encontrado:
         print("Login bem-sucedido!")
-        print(usuario_encontrado.exibir_info())
+        print(usuario_encontrado.exibirInfo())
 
     else:
         print()
@@ -81,27 +80,26 @@ def menu():
         opcao = input("\n\033[1;35mEscolha uma opção: \033[m").strip()
 
         if opcao == "1":
-            os.system('cls')
             cadastrar_usuario()
+            
         elif opcao == "2":
             fazer_login()
+            
         elif opcao == "4":
             print("Saindo...")
             time.sleep(1)
-            os.system('cls')
             break
 
         elif opcao == "3":
             print()
-            os.system('cls')
-
+        
             print("Carregando instâncias em:")
             for tempo in range(1, 4):
                 print(tempo, "s")
                 time.sleep(1)
             print("Processando...")
             time.sleep(3)
-            os.system('cls')
+            
 
             print("\033[1;31mInstâncias de Alunos Representantes:\033[m ")
             # instancias alunos
@@ -109,10 +107,9 @@ def menu():
             aluno2 = AlunoRepresentante("Thiago","Thiago456","987.654.321-11","Thiago.ifro@hotgmail.com","2A Informática")
             aluno3 = AlunoRepresentante("Davi","Davi123","123.456.789-00","Davi.ifro@hotgmail.com","2A Informática")
 
-            print(aluno1.exibir_info())
-
-            print(aluno2.exibir_info())
-            print(aluno3.exibir_info())
+            print(aluno1.exibirInfo())
+            print(aluno2.exibirInfo())
+            print(aluno3.exibirInfo())
 
 
             #instância rifa
@@ -124,15 +121,16 @@ def menu():
             # instâncias local
             print("\033[1;31mInstância Local:\033[m ")
             local1 = Local("Av Calama", "Agenor de Carvalho", "Porto Velho", 500)
-            print(local1.ExibirLocal())
+            
+            print(f"Local 1: {local1.ExibirLocal()}")
             print("")
             local2 = Local("Rua das estrelas", "Centro", "Manaus", 1000)
-            print(local2.ExibirLocal())
+            print(f"Local 2: {local2.ExibirLocal()}")
             print("")
 
             #instância banco
             print("\033[1;31mInstância Banco:\033[m ")
-            banco1 = Conta("Inter", "290.830.990", "78.90.934", "thiago.mendes@gmail.com", 0, 2500 )
+            banco1 = Conta("Inter", "290.830.990", "78.90.934", "thiago.mendes@gmail.com", "0", "2500" )
             print(banco1.exibirChave())
 
             print("")
