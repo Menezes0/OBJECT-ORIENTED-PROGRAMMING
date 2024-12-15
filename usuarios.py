@@ -40,6 +40,8 @@ class AlunoRepresentante(Pessoa):
         self.conta = conta
 
     def exibirConta(self):
+        if not self.conta:
+            raise ValueError("Conta não definida.")
         return f"{self.conta.exibirChave()}"
 
     def exibir_info(self):
@@ -63,5 +65,12 @@ Email: {self.get_email()}
             return 0
 
     def calcularLucro(self, receita: int, custo: int) -> int:
-        lucro = receita - custo
-        return lucro
+        # Calcula o lucro com base na receita e no custo.
+        try:
+            if not isinstance(receita, int) or not isinstance(custo, int):
+                raise TypeError("Receita e custo devem ser números inteiros.")
+            lucro = receita - custo
+            return lucro
+        except Exception as e:
+            print(f"Erro ao calcular lucro: {e}")
+            return 0
