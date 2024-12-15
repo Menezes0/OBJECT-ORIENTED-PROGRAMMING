@@ -1,9 +1,8 @@
-'''Curso: Informática
-Turma: 2A matutino
-Disciplina: Programação Orientada a Objetos
-Integrantes do Grupo: Mirian Menezes, Ashlley Kimberlly, Franciele Kamily, Kerlon Ryan e Evanilson Pinheiro
-Grupo Gestão Eventos
-'''
+# Curso: Informática
+# Turma: 2A matutino
+# Disciplina: Programação Orientada a Objetos
+# Integrantes do Grupo: Mirian Menezes, Ashlley Kimberlly, Franciele Kamily, Kerlon Ryan e Evanilson Pinheiro
+# Grupo Gestão Eventos
 
 from usuarios import AlunoRepresentante
 from rifa import Rifa
@@ -18,59 +17,89 @@ import os
 # Armazenar os usuários cadastrados
 usuarios_cadastrados = []
 
+# Exceção personalizada para usuários inválidos
+class UsuarioInvalidoError(Exception):
+    pass
 
-# cadastrar user
+# Função para limpar a tela (independente do sistema)
+def limpar_tela():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+# Cadastrar usuário
 def cadastrar_usuario():
     print()
     time.sleep(0.5)
     print("Precisamos saber qual seu perfil para cadastro...")
     time.sleep(1)
 
-    tipo_usuario = int(input('''Digite o tipo de usuário.
+    try:
+        tipo_usuario = int(input('''Digite o tipo de usuário.
 1 - Aluno Representante 
 Insira o número correspondente: '''))
-    print()
+        if tipo_usuario != 1:
+            raise UsuarioInvalidoError("Tipo de usuário inválido.")
 
-    nome = input("Digite o nome de usuário: ").strip()
-    senha = input("Digite a senha: ").strip()
-    cpf = input("Digite o CPF: ").strip()
-    email = input("Digite o email: ").strip()
+        print()
+        time.sleep(0.5)
 
-    if tipo_usuario == 1:
-        turma = input("Digite a turma: ").strip()
-        usuario = AlunoRepresentante(nome, senha, cpf, email, turma)
-    else:
-        print("Tipo de usuário inválido.")
-        return
+        nome = input("Digite seu nome: ").strip()
+        cpf = input("Digite seu CPF: ").strip()
+        email = input("Digite seu email: ").strip()
+        turma = input("Digite sua turma: ").strip()
+        conta = input("Digite sua conta: ").strip()
+        senha = input("Digite sua senha: ").strip()
 
-    usuarios_cadastrados.append(usuario)
-    time.sleep(2)
-    os.system('cls')
-    print()
-    print(f"Usuário {nome} cadastrado com sucesso.")
+        usuario = AlunoRepresentante(nome, senha, cpf, email, turma, Conta("Banco X", conta, "1234-5678", "chavepix", 1000, 0, None))
+        usuarios_cadastrados.append(usuario)
 
+        print()
+        time.sleep(0.5)
+        print("Cadastro realizado com sucesso!")
+        time.sleep(1)
 
+    except ValueError:
+        print("Erro: Por favor, insira um número válido para o tipo de usuário.")
+    except UsuarioInvalidoError as e:
+        print(f"Erro: {e}")
+    except Exception as e:
+        print(f"Ocorreu um erro inesperado: {e}")
+    finally:
+        limpar_tela()
+        print("Finalizando cadastro.\n")
+
+# Fazer login
 def fazer_login():
     print()
     nome = input("Digite o nome de usuário: ").strip()
     senha = input("Digite a senha: ").strip()
 
-    usuario_encontrado = None
-    for usuario in usuarios_cadastrados:
-        if usuario.mostrar_nome() == nome and usuario.validar_senha(senha):
-            usuario_encontrado = usuario
-            break
+    print()
+    time.sleep(0.5)
+    print("Verificando...")
+    time.sleep(1)
 
-    if usuario_encontrado:
-        print("Login bem-sucedido!")
-        print(usuario_encontrado.exibir_info())
+    try:
+        usuario_encontrado = None
+        for usuario in usuarios_cadastrados:
+            if usuario.nome == nome and usuario.validar_senha(senha):
+                usuario_encontrado = usuario
+                break
 
-    else:
+        if not usuario_encontrado:
+            raise UsuarioInvalidoError("Nome de usuário ou senha incorretos.")
+
         print()
-        print("Usuário não encontrado. Verifique suas credenciais.")
-        print('''\033[1;31;3mCaso não tenha realizado seu cadastro, não será possível realizar seu login!\033[m''')
+        print("Login bem-sucedido!")
+        return usuario_encontrado
 
+    except UsuarioInvalidoError as e:
+        print(f"Erro: {e}")
+    except Exception as e:
+        print(f"Ocorreu um erro inesperado: {e}")
+    finally:
+        print("Finalizando processo de login.\n")
 
+# Menu principal
 def menu():
     while True:
         print("\n\033[1;35m1. Cadastrar Usuário")
@@ -78,78 +107,32 @@ def menu():
         print("\n3. Acessar Instâncias ")
         print("\n4. Sair\033[m")
 
-        opcao = input("\n\033[1;35mEscolha uma opção: \033[m").strip()
+        print()
+        try:
+            opcao = input("Digite a opção desejada: ").strip()
 
-        if opcao == "1":
-            os.system('cls')
-            cadastrar_usuario()
-        elif opcao == "2":
-            fazer_login()
-        elif opcao == "4":
-            print("Saindo...")
+            if opcao == "1":
+                cadastrar_usuario()
+            elif opcao == "2":
+                usuario = fazer_login()
+                if usuario:
+                    print(f"Bem-vindo, {usuario.nome}!")
+            elif opcao == "3":
+                instancias()
+            elif opcao == "4":
+                print("Saindo...")
+                break
+            else:
+                raise ValueError("Opção inválida. Tente novamente.")
+        except ValueError as e:
+            print(f"Erro: {e}")
+        except Exception as e:
+            print(f"Ocorreu um erro inesperado: {e}")
+        finally:
+            print("Retornando ao menu principal.\n")
             time.sleep(1)
-            os.system('cls')
-            break
 
-        elif opcao == "3":
-            print()
-            os.system('cls')
-
-            print("Carregando instâncias em:")
-            for tempo in range(1, 4):
-                print(tempo, "s")
-                time.sleep(1)
-            print("Processando...")
-            time.sleep(3)
-            os.system('cls')
-
-            print("\033[1;31mInstâncias de Alunos Representantes:\033[m ")
-            # instancias alunos
-            aluno1 = AlunoRepresentante("Ester","ester123","123.456.789-00","ester.ifro@hotgmail.com","2A informática")
-            aluno2 = AlunoRepresentante("Thiago","Thiago456","987.654.321-11","Thiago.ifro@hotgmail.com","2A Informática")
-            aluno3 = AlunoRepresentante("Davi","Davi123","123.456.789-00","Davi.ifro@hotgmail.com","2A Informática")
-
-            print(aluno1.exibir_info())
-
-            print(aluno2.exibir_info())
-            print(aluno3.exibir_info())
-
-
-            #instância rifa
-            print("\033[1;31mInstância Rifa:\033[m ")
-            rifa1 = Rifa("Iphone 14 ProMax", 500, 15)
-            print(rifa1.exibirRifa())
-            print("")
-
-            # instâncias local
-            print("\033[1;31mInstância Local:\033[m ")
-            local1 = Local("Av Calama", "Agenor de Carvalho", "Porto Velho", 500)
-            print(local1.ExibirLocal())
-            print("")
-            local2 = Local("Rua das estrelas", "Centro", "Manaus", 1000)
-            print(local2.ExibirLocal())
-            print("")
-
-            #instância banco
-            print("\033[1;31mInstância Banco:\033[m ")
-            banco1 = Conta("Inter", "290.830.990", "78.90.934", "thiago.mendes@gmail.com", 0, 2500 )
-            print(banco1.exibirChave())
-
-            print("")
-
-            #instância evento
-            print("\033[1;31mInstância Evento:\033[m ")
-            evento1 = Evento("Semana da Vida", "15/11/24", local1, "16:00", "22:00" )
-            print(evento1.detalhes())
-            print("")
-
-            evento2 = Evento("Norte Show", "22/12/24", local2, "11:00", "18:00")
-            print(evento2.detalhes())
-            time.sleep(6)
-
-        else:
-            print("Essa opção não existe. Tente novamente")
-            print("")
-
+# Iniciar o menu
 menu()
-# fim do fim
+
+# Fim do código
