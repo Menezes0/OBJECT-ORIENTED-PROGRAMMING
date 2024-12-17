@@ -40,22 +40,32 @@ class Conta:
 
     def setvalorFinal(self):
         return self.__valor
-
+######################################################################
     def exibirChave(self):
         print(f"Banco: {self.__banco}")
         print(f"Chave Pix: {self.chavePix}")
 
-
-
-
     def adicionarValor(self, valor):
         if valor > 0:
             self.__valor += valor
+
     def exibirSaldo(self):
         print(f"Saldo atual: {self.__valor}")
+
     def retirarValor(self, valor):
-        if 0 < valor <= self.__valor:
+        try:
+            if valor <= 0:
+                raise ValueError("O valor para retirada deve ser maior que zero.")
+
+            if valor > self.__valor:
+                raise ValueError("Saldo insuficiente para a retirada.")
+
             self.__valor -= valor
             print(f"Valor retirado: {valor}")
+
+        except ValueError as e:
+            print(f"Erro: {e}")
         else:
-            print("Valor inválido para retirada.")
+            print("Retirada realizada com sucesso.")
+        finally:
+            print("Processo de retirada concluído.")
