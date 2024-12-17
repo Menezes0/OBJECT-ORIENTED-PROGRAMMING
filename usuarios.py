@@ -1,4 +1,4 @@
-from main import DivisorInvalidoError  # Importando a exceção personalizada
+from DivisorInvalidoError import DivisorInvalidoError  # Importando a exceção personalizada
 from abc import ABC, abstractmethod
 from collections import deque
 
